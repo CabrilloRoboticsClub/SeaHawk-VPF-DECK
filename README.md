@@ -2,6 +2,14 @@
 
 SeaHawk Vertical Profiling Float (Deck Reciever)
 
+## Background
+
+Cabrillo Robotics Club is participating in the MATE ROV underwater internaitonal robotics competition for 2023
+
+One of the chalenges in that competition is creating a reciever to get data from a Vertical Profiling Float.
+
+This is the code that powers our entry for that part of the compeption.
+
 ## Components
 
 | Store | Learn Article |
