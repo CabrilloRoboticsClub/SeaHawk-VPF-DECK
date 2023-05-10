@@ -52,16 +52,8 @@ i2c = board.I2C()
 # LoRa Radio Feather SETUP
 #
 
-# set the Chip Select and Reset pins based on board type
-if "Particle Xenon" in board_type:
-    CS = digitalio.DigitalInOut(board.D2)
-    RESET = digitalio.DigitalInOut(board.D3)
-elif "RFM9x" in board_type:
-    cs = digitalio.DigitalInOut(board.RFM9X_CS)
-    reset = digitalio.DigitalInOut(board.RFM9X_RST)
-else:
-    CS = digitalio.DigitalInOut(board.D5)
-    RESET = digitalio.DigitalInOut(board.D6)
+CS = digitalio.DigitalInOut(board.D5)
+RESET = digitalio.DigitalInOut(board.D6)
 
 # set the radio frequency to 915mhz
 RADIO_FREQ_MHZ = 915.0 
