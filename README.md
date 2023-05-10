@@ -1,6 +1,6 @@
 # SeaHawk-VPF-DECK
 
-SeaHawk Vertical Profiling Float (Deck Reciever)
+SeaHawk Vertical Profiling Float (Deck) Code
 
 ## Background
 
