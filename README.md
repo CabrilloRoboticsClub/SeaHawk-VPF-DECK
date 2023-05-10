@@ -10,6 +10,12 @@ One of the chalenges in that competition is creating a reciever to get data from
 
 This is the code that powers our entry for that part of the compeption.
 
+[materovcompetition.org](https://materovcompetition.org/world-championship)
+
+![(mate rov comp 2023 patch)](https://materovcompetition.org/hs-fs/hubfs/MATE-ROV-Competition-2023-Patch.png?width=900&height=900&name=MATE-ROV-Competition-2023-Patch.png)
+
+![(mate rov comp 2023 location)](https://materovcompetition.org/hubfs/Longmont%20St.%20Vrain%20announcement.png)
+
 ## Components
 
 | Store | Learn Article |
