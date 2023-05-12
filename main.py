@@ -62,7 +62,7 @@ RADIO_FREQ_MHZ = 915.0
 rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, RADIO_FREQ_MHZ)
 
 # set my node ID
-rfm9x.node = 50
+rfm9x.node = 28
 
 #
 # OLED Wing SETUP
