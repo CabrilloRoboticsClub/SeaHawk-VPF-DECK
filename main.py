@@ -79,7 +79,7 @@ display = adafruit_displayio_sh1107.SH1107(
     display_bus, width=128, height=64, rotation=0
 )
 
-# create a layer for switching to the display
+# create a layer for the header on the display
 display_group = displayio.Group()
 # show the layer on the display
 display.show(display_group)
@@ -126,22 +126,17 @@ while True:
         pass
     else:
         # blank screen to display new packet
-        display_group.append(
-            Rect(
-                0,
-                20,
-                128,
-                64,
-                fill=0x000000
-            )
-        )
+        try:
+            display_group.pop(2)
+        except:
+            pass
         # write packet data to screen
         display_group.append(
             label.Label(
                 terminalio.FONT, 
                 text=str(packet, "ascii"),
                 color=0xFFFFFF,
-                x=8,
+                x=8, 
                 y=24
             )
         )
