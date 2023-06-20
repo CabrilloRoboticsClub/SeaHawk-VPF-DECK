@@ -77,7 +77,14 @@ RESET = digitalio.DigitalInOut(board.D6)
 # set the radio frequency to 915mhz (NOT 868)
 RADIO_FREQ_MHZ = 915.0 
 
+# key A on the oled screen is on Digital Pin 9
 KEY_A = DigitalInOut(board.D9)
+
+# set digital pin 9 to input mode
+KEY_A.direction = Direction.INPUT
+
+# add a pull up resistor
+KEY_A.pull = Pull.UP
 
 
 # # # # # # # #
@@ -144,14 +151,20 @@ display_group.append(
 
 
 # # # # # # # #
-# Receive data from radio and display it
+# Wait for keypress to activate robot
 # # # # # # # #
 
 while True:
 
-    if KEY_A.value:
+    # detect key press
+    if not KEY_A.value:
         rfm9x.send(bytes("CABRILLO VPF DIVE", "utf-8"))
         break
+
+
+# # # # # # # #
+# Receive data from radio and display it
+# # # # # # # #
 
 while True:
 
