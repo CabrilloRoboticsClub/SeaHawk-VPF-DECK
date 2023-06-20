@@ -1,7 +1,7 @@
 '''
 code.py
 
-SeaHawk Vertical Profiling Float Deck Reciever Code
+SeaHawk Vertical Profiling Float Deck Receiver Code
 
 Copyright (C) 2022-2023 Cabrillo Robotics Club
 
@@ -23,6 +23,21 @@ Cabrillo Robotics Club
 cabrillorobotics@gmail.com
 '''
 
+# # # # # # # #
+# CONSTANTS
+# # # # # # # #
+
+# LoRa Device ID for the Float Transceiver
+FLOAT_LORA_ID = 18
+
+# LoRa Device ID for the Deck Transceiver
+DECK_LORA_ID = 28
+
+
+# # # # # # # #
+# IMPORTS
+# # # # # # # #
+
 # python hardware interfaces
 import board
 import busio
@@ -39,8 +54,13 @@ import adafruit_displayio_sh1107
 from adafruit_display_text import label
 from adafruit_display_shapes.rect import Rect
 
-# get board details
-board_type = os.uname().machine
+# BUTTONS!!!!!!!!!!!!!!
+from digitalio import DigitalInOut, Direction, Pull
+
+
+# # # # # # # #
+# BUS SETUP
+# # # # # # # #
 
 # instantiate the spi interface
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
@@ -48,25 +68,35 @@ spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 # instantiate the i2c interface
 i2c = board.I2C()
 
-#
-# LoRa Radio Feather SETUP
-#
-
+# LoRa Module Chip Select on Digital Pin 5
 CS = digitalio.DigitalInOut(board.D5)
+
+# LoRa Module Reset on Digital Pin 6
 RESET = digitalio.DigitalInOut(board.D6)
 
-# set the radio frequency to 915mhz
+# set the radio frequency to 915mhz (NOT 868)
 RADIO_FREQ_MHZ = 915.0 
 
-# instantiate the lora radio in 915mhz mode
+KEY_A = DigitalInOut(board.D9)
+
+
+# # # # # # # #
+# LoRa Radio Feather SETUP
+# # # # # # # #
+
+# instantiate a rfm9x object
 rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, RADIO_FREQ_MHZ)
 
 # set my node ID
-rfm9x.node = 28
+rfm9x.node = DECK_LORA_ID
 
-#
+# set the destination node
+rfm9x.destination = FLOAT_LORA_ID
+
+
+# # # # # # # #
 # OLED Wing SETUP
-#
+# # # # # # # #
 
 # reset display to cleanly handle soft reset
 displayio.release_displays()
@@ -85,9 +115,9 @@ display_group = displayio.Group()
 display.show(display_group)
 
 
-#
+# # # # # # # #
 # Display Header
-#
+# # # # # # # #
 
 # draw outline for club name
 display_group.append(
@@ -98,7 +128,7 @@ display_group.append(
         16, 
         fill=0x000000,
         outline=0xFFFFFF
-    )   
+    )
 )
 
 # Draw the club name at the top of the display
@@ -113,9 +143,15 @@ display_group.append(
 )
 
 
-#
+# # # # # # # #
 # Receive data from radio and display it
-#
+# # # # # # # #
+
+while True:
+
+    if KEY_A:
+        rfm9x.send(bytes("CABRILLO VPF DIVE", "utf-8"))
+        break
 
 while True:
 
