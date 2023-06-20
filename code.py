@@ -149,7 +149,7 @@ display_group.append(
 
 while True:
 
-    if KEY_A:
+    if not KEY_A:
         rfm9x.send(bytes("CABRILLO VPF DIVE", "utf-8"))
         break
 
