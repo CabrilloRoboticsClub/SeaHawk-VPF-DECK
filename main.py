@@ -27,6 +27,9 @@ cabrillorobotics@gmail.com
 # CONSTANTS
 # # # # # # # #
 
+# utc offset
+UTC_OFFSET = 243743298327985
+
 # LoRa Device ID for the Float Transceiver
 FLOAT_LORA_ID = 18
 
@@ -163,7 +166,7 @@ while True:
 
 
 # # # # # # # #
-# Receive data from radio and display it
+# Receive data from radio and process it and display it
 # # # # # # # #
 
 while True:
@@ -179,6 +182,11 @@ while True:
             display_group.pop(2)
         except:
             pass
+        # process packet
+        packet_list = packet.encode("utf-8").split()
+        team_num, time_rolling = packet_list[0]
+        time_rolling = int(packet_list[1])
+
         # write packet data to screen
         display_group.append(
             label.Label(
