@@ -27,9 +27,6 @@ cabrillorobotics@gmail.com
 # CONSTANTS
 # # # # # # # #
 
-# utc offset
-UTC_OFFSET = 243743298327985
-
 # LoRa Device ID for the Float Transceiver
 FLOAT_LORA_ID = 18
 
@@ -46,6 +43,9 @@ import board
 import busio
 import digitalio
 import os
+
+import time
+import adafruit_datetime as datetime
 
 # lora radio library
 import adafruit_rfm9x
@@ -78,7 +78,7 @@ CS = digitalio.DigitalInOut(board.D5)
 RESET = digitalio.DigitalInOut(board.D6)
 
 # set the radio frequency to 915mhz (NOT 868)
-RADIO_FREQ_MHZ = 915.0 
+RADIO_FREQ_MHZ = 915.0
 
 # key A on the oled screen is on Digital Pin 9
 KEY_A = DigitalInOut(board.D9)
@@ -88,6 +88,12 @@ KEY_A.direction = Direction.INPUT
 
 # add a pull up resistor
 KEY_A.pull = Pull.UP
+
+#
+# datetime setup
+#
+
+epoch = datetime.datetime(2023, 6, 22, 15, 35, 0) + datetime.timedelta(hours=+6)
 
 
 # # # # # # # #
@@ -132,23 +138,12 @@ display.show(display_group)
 # draw outline for club name
 display_group.append(
     Rect(
-        0, 
-        0, 
-        128, 
-        16, 
+        0,
+        0,
+        128,
+        16,
         fill=0x000000,
         outline=0xFFFFFF
-    )
-)
-
-# Draw the club name at the top of the display
-display_group.append(
-    label.Label(
-        terminalio.FONT, 
-        text="Cabrillo Robotics", 
-        color=0xFFFFFF, 
-        x=14, 
-        y=8
     )
 )
 
@@ -163,6 +158,19 @@ while True:
     if not KEY_A.value:
         rfm9x.send(bytes("CABRILLO VPF DIVE", "utf-8"))
         break
+
+
+# Draw the club name at the top of the display
+display_group.append(
+    label.Label(
+        terminalio.FONT,
+        text="Cabrillo Robotics",
+        color=0xFFFFFF,
+        x=14,
+        y=8
+    )
+)
+
 
 
 # # # # # # # #
@@ -182,18 +190,21 @@ while True:
             display_group.pop(2)
         except:
             pass
+
         # process packet
-        packet_list = packet.encode("utf-8").split()
-        team_num, time_rolling = packet_list[0]
+        packet_list = packet.decode("utf-8").split()
+        team_num = packet_list[0]
         time_rolling = int(packet_list[1])
+
+        processed_packet = "TEAM: " + team_num + "\r\n" + str(epoch + datetime.timedelta(seconds=+time_rolling))
 
         # write packet data to screen
         display_group.append(
             label.Label(
-                terminalio.FONT, 
-                text=str(packet, "ascii"),
+                terminalio.FONT,
+                text=str(processed_packet, "ascii"),
                 color=0xFFFFFF,
-                x=8, 
+                x=8,
                 y=24
             )
         )
