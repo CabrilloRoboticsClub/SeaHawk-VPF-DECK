@@ -93,7 +93,7 @@ KEY_A.pull = Pull.UP
 # datetime setup
 #
 
-epoch = datetime.datetime(2023, 6, 22, 15, 35, 0) + datetime.timedelta(hours=+6)
+epoch = datetime.datetime(2023, 6, 23, 13, 50, 0) + datetime.timedelta(hours=+6)
 
 
 # # # # # # # #
@@ -192,19 +192,24 @@ while True:
             pass
 
         # process packet
-        packet_list = packet.decode("utf-8").split()
-        team_num = packet_list[0]
-        time_rolling = int(packet_list[1])
+        try:
+            packet_list = packet.decode("utf-8").split()
+            team_num = packet_list[0]
+            time_rolling = int(packet_list[1])
 
-        processed_packet = "TEAM: " + team_num + "\r\n" + str(epoch + datetime.timedelta(seconds=+time_rolling))
+            processed_packet = "TEAM: " + team_num + "\r\n" + str(epoch + datetime.timedelta(seconds=+time_rolling))
 
-        # write packet data to screen
-        display_group.append(
-            label.Label(
-                terminalio.FONT,
-                text=str(processed_packet, "ascii"),
-                color=0xFFFFFF,
-                x=8,
-                y=24
+            if team_num == "PN03":
+                
+                # write packet data to screen
+                display_group.append(
+                    label.Label(
+                        terminalio.FONT,
+                        text=str(processed_packet, "ascii"),
+                        color=0xFFFFFF,
+                        x=8,
+                        y=24
+                    )
             )
-        )
+        except:
+            pass
